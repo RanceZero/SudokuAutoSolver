@@ -9,7 +9,7 @@ let matriz = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 9, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 'cerri']
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 function setup(){
@@ -26,11 +26,10 @@ function setup(){
 function drawNumber(i, j, n){
   textSize(30);
   if(n != 0)
-    text(n, x + i*squareSize + 16, y + j*squareSize + 40-2+1-1+1-1+1-1+1-1+1-1);
+    text(n, x + i*squareSize + 16, y + j*squareSize + 38);
 }
 
-function draw(){
-
+function drawGrid(){
   for(let i = 0; i <= qtdX; i++){
     if(i % 3 == 0) strokeWeight(3);
     line(x + i*squareSize, y, x + i*squareSize, y+squareSize*qtdY);
@@ -41,11 +40,20 @@ function draw(){
     line(x, y + i*squareSize, x+squareSize*qtdX, y + i*squareSize);
     strokeWeight(1);
   }
+}
 
+function fillGrid(){
   for(let i = 0; i < qtdX; i++){
     for(let j = 0; j < qtdY; j++){
       drawNumber(j, i, matriz[i][j]);
     }
   }
+}
+
+function draw(){
+
+  drawGrid();
+
+  fillGrid();
 
 }

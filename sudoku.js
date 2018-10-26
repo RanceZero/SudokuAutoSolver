@@ -52,6 +52,8 @@ function fillGrid(){
 
 function draw(){
 
+  clear();
+
   drawGrid();
 
   fillGrid();

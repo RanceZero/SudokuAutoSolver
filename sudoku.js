@@ -1,4 +1,5 @@
 let width, height, x, y, qtdX, qtdY, squareSize;
+let selectedCell = [0, 0];
 
 let matriz = [
   [0, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -17,14 +18,21 @@ function setup(){
   height = windowHeight*0.97;
   canvas = createCanvas(width, height);
   qtdX = 9; // quantity of squares in row
-  qtdY = 9; // quantity of squares in column 
+  qtdY = 9; // quantity of squares in column
   squareSize = 50;
   x = width/2 - qtdX/2*squareSize;
   y = height/2 - qtdY/2*squareSize;
+  button = createButton('OK');
+  button.position(width/2-8, 35);
+  button.mousePressed(iniciarBusca);
+}
+
+function iniciarBusca(){
+  setInterval(sudokuStep, 1000);
 }
 
 function drawGrid(){
-  
+
   // draw qtdX + 1 vertical lines
   for(let i = 0; i <= qtdX; i++){
     if(i % 3 == 0) strokeWeight(3);
@@ -63,26 +71,54 @@ function getFirstBlank(){
         return [i, j];
       }
     }
-  } 
+  }
 }
 
 function sudokuStep(){
-  let coordinate = getFirstBlank();
-  row = coordinate[0];
-  col = coordinate[1];
+  let [row, col] = getFirstBlank();
   matriz[row][col] = matriz[row][col]+1;
+}
+
+function drawSelected(squareColor){
+  let [i, j] = selectedCell;
+  push();
+  fill(squareColor);
+  rect(x+j*squareSize, y+i*squareSize, squareSize, squareSize);
+  pop();
 }
 
 function draw(){
 
-  frameRate(0.5);
-
   clear();
 
+  drawSelected(color(0, 0, 255, 100));
   drawGrid();
 
   fillGrid();
 
-  sudokuStep();
+}
 
+function keyPressed() {
+  let[i, j] = selectedCell;
+  if(keyCode === LEFT_ARROW) {
+    if(j > 0) j--;
+  }
+  else if(keyCode === RIGHT_ARROW) {
+    if(j+1 < qtdX) j++;
+  }
+  else if(keyCode === UP_ARROW) {
+    if(i > 0) i--;
+  }
+  else if(keyCode === DOWN_ARROW) {
+    if(i+1 < qtdY) i++;
+  }
+  selectedCell = [i, j];
+}
+
+function keyTyped() {
+  console.log(key);
+  let [i, j] = selectedCell;
+  if('0' <= key && key <= '9'){
+    matriz[i][j] = parseInt(key);
+  }
 }

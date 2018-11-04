@@ -287,7 +287,7 @@ function keyTyped() {
   }
 
   let [i, j] = selectedCell;
-  if(movimentoValido(matrizDesenho, i, j, parseInt(key)) && '0' <= key && key <= '9'){
+  if('0' <= key && key <= '9' && movimentoValido(matrizDesenho, i, j, parseInt(key))){
     matrizDesenho[i][j] = parseInt(key);
   }
 }

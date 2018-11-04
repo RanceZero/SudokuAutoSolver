@@ -1,5 +1,6 @@
 let width, height, x, y, qtdX, qtdY, squareSize;
 let selectedCell = [0, 0];
+let buscando = false
 
 let matriz = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -22,12 +23,14 @@ function setup(){
   squareSize = 50;
   x = width/2 - qtdX/2*squareSize;
   y = height/2 - qtdY/2*squareSize;
-  button = createButton('OK');
+  button = createButton('Resolver');
   button.position(width/2-8, 35);
   button.mousePressed(iniciarBusca);
 }
 
 function iniciarBusca(){
+  buscando = true
+  button.remove()
   setInterval(sudokuStep, 1000);
 }
 
@@ -91,7 +94,10 @@ function draw(){
 
   clear();
 
-  drawSelected(color(0, 0, 255, 100));
+  if(!buscando){
+    drawSelected(color(0, 0, 255, 100));
+  }
+  
   drawGrid();
 
   fillGrid();
@@ -99,6 +105,11 @@ function draw(){
 }
 
 function keyPressed() {
+  
+  if(buscando){
+    return
+  }
+
   let[i, j] = selectedCell;
   if(keyCode === LEFT_ARROW) {
     if(j > 0) j--;
@@ -116,7 +127,11 @@ function keyPressed() {
 }
 
 function keyTyped() {
-  console.log(key);
+
+  if(buscando){
+    return
+  }
+
   let [i, j] = selectedCell;
   if('0' <= key && key <= '9'){
     matriz[i][j] = parseInt(key);

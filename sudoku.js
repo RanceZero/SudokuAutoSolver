@@ -76,7 +76,7 @@ function buscaCegaInit(){
       editavel[i].push(matrizDesenho[i][j] === 0);
     }
   }
-  achou = false;
+  concluido = false;
   fronteira = [];
   explorados = [];
   inicial = copiaMatriz(matrizDesenho);
@@ -91,7 +91,7 @@ function buscaCegaLoop(){
     return;
   }
   buscaCegaStep();
-  if(achou){
+  if(concluido){
     clearInterval(buscaCegaTimer);
     console.log('SUDOKU RESOLVIDO');
     return;
@@ -102,7 +102,7 @@ function buscaCegaStep(){
   let atual = fronteira.pop();
   matrizDesenho = copiaMatriz(atual);
   explorados.push(atual);
-  achou = (qtdElementos(atual) === 81) // meta
+  concluido = (qtdElementos(atual) === 81) // meta
   let sucessores = getSucessores(atual);
   for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);

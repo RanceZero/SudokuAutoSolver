@@ -24,7 +24,7 @@ function setup(){
   x = width/2 - qtdX/2*squareSize;
   y = height/2 - qtdY/2*squareSize;
   button = createButton('Resolver');
-  button.position(width/2-8, 35);
+  button.position(width/2-button.size().width/2, 35);
   button.mousePressed(iniciarBusca);
 }
 

@@ -4,7 +4,21 @@ let buscando = false;
 
 let delay = 1; // velocidade da busca
 
-let matrizDesenho = [
+let matrizDesenho = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
+/*
+
+Algumas matrizes para testar:
+
+  
   [7, 3, 5, 6, 1, 4, 8, 9, 2],
   [8, 4, 2, 9, 7, 3, 5, 6, 1],
   [9, 6, 1, 2, 8, 5, 3, 7, 4],
@@ -14,21 +28,7 @@ let matrizDesenho = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
 
-/*
-
-Algumas matrizes para testar:
-
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
   [7, 3, 5, 6, 1, 4, 8, 9, 2],
   [8, 4, 2, 9, 7, 3, 5, 6, 1],
@@ -87,13 +87,11 @@ function buscaCegaInit(){
 function buscaCegaLoop(){
   if(fronteira.length == 0){
     clearInterval(buscaCegaTimer);
-    console.log('FAIL');
     return;
   }
   buscaCegaStep();
   if(concluido){
     clearInterval(buscaCegaTimer);
-    console.log('SUDOKU RESOLVIDO');
     return;
   }
 }
@@ -127,7 +125,7 @@ function getSucessores(matriz){
   for(let i = qtdX-1; i >= 0; i--){
     for(let j = qtdY-1; j >= 0; j--){
       for(let k = 9; k >= 1; k--){
-        if(editavel[i][j] && movimentoValido(matriz, i, j, k)){
+        if(editavel[i][j] && movimentoValido(matriz, i, j, k) && matriz[i][j] == 0){
           let suc = copiaMatriz(matriz);
           suc[i][j] = k;
           if(!pertence(explorados, suc) && !pertence(fronteira, suc)){

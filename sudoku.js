@@ -1,6 +1,7 @@
 let width, height, x, y, qtdX, qtdY, squareSize;
 let selectedCell = [0, 0];
 let buscando = false;
+let busca;
 
 let delay = 1; // velocidade da busca
 
@@ -66,7 +67,18 @@ let editavel = null;
 let fronteira = null;
 let explorados = null;
 
+
 function buscaCegaInit(){
+  busca = 'cega';
+  buscaInit();
+}
+
+function buscaInformadaInit(){
+  busca = 'informada';
+  buscaInit();
+}
+
+function buscaInit(){
   buscando = true;
   button.remove();
   button2.remove();
@@ -82,29 +94,41 @@ function buscaCegaInit(){
   explorados = [];
   inicial = copiaMatriz(matrizDesenho);
   fronteira.push(inicial);
-  buscaCegaTimer = setInterval(buscaCegaLoop, delay);
+  buscaTimer = setInterval(buscaLoop, delay);
 }
 
-function buscaCegaLoop(){
+function buscaLoop(){
   if(fronteira.length == 0){
-    clearInterval(buscaCegaTimer);
+    clearInterval(buscaTimer);
     return;
   }
-  buscaCegaStep();
+  buscaStep();
   if(concluido){
-    clearInterval(buscaCegaTimer);
+    clearInterval(buscaTimer);
     return;
   }
 }
 
-function buscaCegaStep(){
+function buscaStep(){
   let atual = fronteira.pop();
   matrizDesenho = copiaMatriz(atual);
   explorados.push(atual);
   concluido = (qtdElementos(atual) === 81) // meta
-  let sucessores = getSucessores(atual);
-  for(let i = 0; i < sucessores.length; i++){
+  if(concluido){
+    return
+  }
+  if(busca=='cega'){
+    let sucessores = getSucessoresCega(atual);
+    for(let i = 0; i < sucessores.length; i++){
+        fronteira.push(sucessores[i]);
+    }
+  }
+  else if(busca=='informada'){
+    let sucessores = getSucessoresInformada(atual);
+    for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
+    }
+    orderFronteira();
   }
 }
 
@@ -121,7 +145,7 @@ function qtdElementos(matriz){
 }
 
 // retorna lista de matrizes sucessoras
-function getSucessores(matriz){
+function getSucessoresCega(matriz){
   let sucessores = [];
   for(let i = qtdX-1; i >= 0; i--){
     for(let j = qtdY-1; j >= 0; j--){
@@ -137,6 +161,43 @@ function getSucessores(matriz){
     }
   }
   return sucessores;
+}
+
+// atualiza custo se encontrado um sucessor que já pertence a fronteira com custo menor
+function getSucessoresInformada(matriz){
+  let sucessores = [];
+  let possibilidades = [];
+  for(let i = qtdX-1; i >= 0; i--){
+    for(let j = qtdY-1; j >= 0; j--){
+      possibilidades = [];
+      for(let k = 9; k >= 1; k--){
+        if(editavel[i][j] && movimentoValido(matriz, i, j, k) && matriz[i][j] == 0){
+          let suc = copiaMatriz(matriz);
+          suc[i][j] = k;
+          if(!pertence(explorados, suc)){
+            possibilidades.push(suc);
+          }
+        }
+      }
+      for(let i = 0; i < possibilidades.length; i++){
+        if(pertence(fronteira, possibilidades[i])){
+          indexEmFronteira = fronteira.indexOf(possibilidades[i]);
+          if(possibilidades.length<fronteira[indexEmFronteira].custo){
+            fronteira[indexEmFronteira].custo = possibilidades.length;
+          }
+        }
+        else{
+          possibilidades[i].custo = possibilidades.length;
+          sucessores.push(possibilidades[i]);
+        }
+      }
+    }
+  }
+  return sucessores;
+}
+
+function orderFronteira(){
+  fronteira.sort(function(a,b){ return b.custo-a.custo });
 }
 
 // verifica se pode colocar o numero k na posicao m[i][j]
@@ -205,6 +266,7 @@ function setup(){
   
   button2 = createButton('Busca best first');
   button2.position(width/2-button2.size().width/2+10,40);
+  button2.mousePressed(buscaInformadaInit);
 }
 
 function drawGrid(){

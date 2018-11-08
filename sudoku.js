@@ -199,11 +199,11 @@ function setup(){
   y = height/2 - qtdY/2*squareSize;
   
   button = createButton('Busca em profundidade');
-  button.position(width/2-button.size().width/2, 05);
+  button.position(width/2-button.size().width/2+10, 05);
   button.mousePressed(buscaCegaInit);
   
   button2 = createButton('Busca best first');
-  button2.position(width/2-button2.size().width/2,40);
+  button2.position(width/2-button2.size().width/2+10,40);
 }
 
 function drawGrid(){

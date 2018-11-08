@@ -69,6 +69,7 @@ let explorados = null;
 function buscaCegaInit(){
   buscando = true;
   button.remove();
+  button2.remove();
   editavel = [];
   for(let i = 0; i < qtdX; i++){
     editavel.push([]);

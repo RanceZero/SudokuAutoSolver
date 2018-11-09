@@ -123,12 +123,12 @@ function buscaStep(){
         fronteira.push(sucessores[i]);
     }
   }
-  else if(busca=='informada'){
+  else if(busca=='informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
     let sucessores = getSucessoresInformada(atual);
+    sucessores.sort(function(a,b){ return b.custo-a.custo});
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
     }
-    orderFronteira();
   }
 }
 
@@ -174,30 +174,18 @@ function getSucessoresInformada(matriz){
         if(editavel[i][j] && movimentoValido(matriz, i, j, k) && matriz[i][j] == 0){
           let suc = copiaMatriz(matriz);
           suc[i][j] = k;
-          if(!pertence(explorados, suc)){
+          if(!pertence(explorados, suc) && !pertence(fronteira, suc)){
             possibilidades.push(suc);
           }
         }
       }
       for(let i = 0; i < possibilidades.length; i++){
-        if(pertence(fronteira, possibilidades[i])){
-          indexEmFronteira = fronteira.indexOf(possibilidades[i]);
-          if(possibilidades.length<fronteira[indexEmFronteira].custo){
-            fronteira[indexEmFronteira].custo = possibilidades.length;
-          }
-        }
-        else{
-          possibilidades[i].custo = possibilidades.length;
-          sucessores.push(possibilidades[i]);
-        }
+        possibilidades[i].custo = possibilidades.length;
+        sucessores.push(possibilidades[i]);
       }
     }
   }
   return sucessores;
-}
-
-function orderFronteira(){
-  fronteira.sort(function(a,b){ return b.custo-a.custo });
 }
 
 // verifica se pode colocar o numero k na posicao m[i][j]

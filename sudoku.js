@@ -5,15 +5,17 @@ let busca;
 
 let delay = 1; // velocidade da busca
 
-let matrizDesenho = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+let matrizDesenho = [
+  [0, 0, 0, 6, 0, 0, 4, 0, 0],
+  [7, 0, 0, 0, 0, 3, 6, 0, 0],
+  [0, 0, 0, 0, 9, 1, 0, 8, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 5, 0, 1, 8, 0, 0, 0, 3],
+  [0, 0, 0, 3, 0, 6, 0, 4, 5],
+  [0, 4, 0, 2, 0, 0, 0, 6, 0],
+  [9, 0, 3, 0, 0, 0, 0, 0, 0],
+  [0, 2, 0, 0, 0, 0, 1, 0, 0]
+];
 
 /*
 
@@ -152,16 +154,13 @@ function qtdElementos(matriz){
 // retorna lista de matrizes sucessoras
 function getSucessoresCega(matriz){
   let sucessores = [];
-  for(let i = qtdX-1; i >= 0; i--){
-    for(let j = qtdY-1; j >= 0; j--){
-      for(let k = 9; k >= 1; k--){
-        if(editavel[i][j] && movimentoValido(matriz, i, j, k) && matriz[i][j] == 0){
-          let suc = copiaMatriz(matriz);
-          suc[i][j] = k;
-          if(!pertence(explorados, suc) && !pertence(fronteira, suc)){
-            sucessores.push(suc);
-          }
-        }
+  let [i, j] = getFirstBlank(matriz);
+  for(let k = 9; k >= 1; k--){
+    if(matriz[i][j] == 0 && editavel[i][j] && movimentoValido(matriz, i, j, k)){
+      let suc = copiaMatriz(matriz);
+      suc[i][j] = k;
+      if(!pertence(explorados, suc)){
+        sucessores.push(suc);
       }
     }
   }
@@ -191,6 +190,17 @@ function getSucessoresInformada(matriz){
     }
   }
   return sucessores;
+}
+
+function getFirstBlank(matriz){
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++) {
+      if(matriz[i][j] === 0){
+        return [i, j];
+      }
+    }
+  }
+  return [-1, -1];
 }
 
 // verifica se pode colocar o numero k na posicao m[i][j]
@@ -252,11 +262,11 @@ function setup(){
   squareSize = 50;
   x = width/2 - qtdX/2*squareSize;
   y = height/2 - qtdY/2*squareSize;
-  
+
   button = createButton('Busca em profundidade');
   button.position(width/2-button.size().width/2+10, 05);
   button.mousePressed(buscaCegaInit);
-  
+
   button2 = createButton('Busca best first');
   button2.position(width/2-button2.size().width/2+10,40);
   button2.mousePressed(buscaInformadaInit);

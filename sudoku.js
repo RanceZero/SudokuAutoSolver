@@ -166,30 +166,27 @@ function getSucessoresCega(matriz){
 function getSucessoresInformada(matriz){
   let sucessores = [];
   let possibilidades = [];
-  for(let i = qtdX-1; i >= 0; i--){
-    for(let j = qtdY-1; j >= 0; j--){
-      possibilidades = [];
-      for(let k = 9; k >= 1; k--){
-        if(editavel[i][j] && movimentoValido(matriz, i, j, k) && matriz[i][j] == 0){
-          let suc = copiaMatriz(matriz);
-          suc[i][j] = k;
-          if(!pertence(explorados, suc) && !pertence(fronteira, suc)){
-            possibilidades.push(suc);
-          }
-        }
-      }
-      for(let i = 0; i < possibilidades.length; i++){
-        possibilidades[i].custo = possibilidades.length;
-        sucessores.push(possibilidades[i]);
+  possibilidades = [];
+  let [i, j] = getFirstBlank(matriz);
+  for(let k = 9; k >= 1; k--){
+    if(matriz[i][j] == 0 && editavel[i][j] && movimentoValido(matriz, i, j, k)){
+      let suc = copiaMatriz(matriz);
+      suc[i][j] = k;
+      if(!pertence(explorados, suc)){
+        possibilidades.push(suc);
       }
     }
+  }
+  for(let i = 0; i < possibilidades.length; i++){
+    possibilidades[i].custo = possibilidades.length;
+    sucessores.push(possibilidades[i]);
   }
   return sucessores;
 }
 
 function getFirstBlank(matriz){
   for(let i = 0; i < qtdX; i++){
-    for(let j = 0; j < qtdY; j++) {
+    for(let j = 0; j < qtdY; j++){
       if(matriz[i][j] === 0){
         return [i, j];
       }

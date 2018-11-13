@@ -34,7 +34,6 @@ Algumas matrizes para testar:
   [2, 4, 8, 9, 5, 7, 1, 3, 0],
   [0, 6, 0, 4, 0, 8, 2, 5, 9]
 
-
   [0, 0, 0, 2, 6, 0, 7, 0, 1],
   [6, 8, 0, 0, 7, 0, 0, 9, 0],
   [1, 9, 0, 0, 0, 4, 5, 0, 0],
@@ -128,23 +127,11 @@ function buscaLoop(){
   }
   else if(busca == 'informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
     let sucessores = getSucessoresInformada(atual);
-    sucessores.sort(function(a,b){ return b.custo-a.custo});
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
     }
+    fronteira.sort(function(a,b){ return b.custo-a.custo});
   }
-}
-
-// quantidade de celulas preenchidas de um tabuleiro
-function qtdElementos(matriz){
-  let count = 0;
-  for(let i = 0; i < qtdX; i++){
-    for(let j = 0; j < qtdY; j++){
-      if(matriz[i][j] !== 0)
-        count++;
-    }
-  }
-  return count;
 }
 
 // retorna lista de matrizes sucessoras
@@ -166,28 +153,89 @@ function getSucessoresCega(matriz){
 // atualiza custo se encontrado um sucessor que já pertence a fronteira com custo menor
 function getSucessoresInformada(matriz){
   let sucessores = [];
-  let possibilidades = [];
-  possibilidades = [];
   let [i, j] = getFirstBlank(matriz);
   for(let k = 9; k >= 1; k--){
-    if(matriz[i][j] == 0 && editavel[i][j] && movimentoValido(matriz, i, j, k)){
+    if(editavel[i][j] && movimentoValido(matriz, i, j, k)){
       let suc = copiaMatriz(matriz);
       suc[i][j] = k;
-      if(!pertence(explorados, suc)){
-        possibilidades.push(suc);
+      if(!impossivel(suc) && !pertence(explorados, suc)){
+        suc.custo = f(suc);
+        suc.qtd = qtdElementos(suc);
+        sucessores.push(suc);
       }
     }
-  }
-  for(let i = 0; i < possibilidades.length; i++){
-    possibilidades[i].custo = possibilidades.length;
-    sucessores.push(possibilidades[i]);
   }
   return sucessores;
 }
 
-function getFirstBlank(matriz){
+// função de avaliação
+function f(m){
+  let r = 9;
   for(let i = 0; i < qtdX; i++){
     for(let j = 0; j < qtdY; j++){
+      let v = {};
+      for(let k = 1; k <= 9; k++) v[k] = 0;
+      for(let a = 0; a < qtdX; a++) v[m[i][a]]++;
+      for(let a = 0; a < qtdY; a++) v[m[a][j]]++;
+      let I = Math.trunc(i/3)*3;
+      let J = Math.trunc(j/3)*3;
+      for(let a = I; a < I+3; a++)
+        for(let b = J; b < J+3; b++) v[m[a][b]]++;
+      let count = 0;
+      for(let k = 1; k <= 9; k++) if(v[k]) count++;
+      r = Math.min(r, count);
+    }
+  }
+  return 9-r;
+}
+
+function impossivel(m){
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++){
+      if(m[i][j] === 0){
+        if(numerosPossiveis(m, i, j).length === 0) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function numerosPossiveis(m, i, j){
+  let lista = [], existe = {};
+  for(let k = 1; k <= 9; k++) existe[k] = false;
+  // linha
+  for(let k = 1; k <= 9; k++){
+    for(let a = 0; a < qtdX; a++)
+      if(m[i][a] === k) existe[k] = true;
+    // coluna
+    for(let a = 0; a < qtdY; a++)
+      if(m[a][j] === k) existe[k] = true;
+    // quadrado
+    let I = Math.trunc(i/3)*3;
+    let J = Math.trunc(j/3)*3;
+    for(let a = I; a < I+3; a++)
+      for(let b = J; b < J+3; b++)
+        if(m[a][b] === k) existe[k] = true;
+  }
+  for(let k = 1; k <= 9; k++) if(!existe[k]) lista.push(k);
+  return lista;
+}
+
+// quantidade de celulas preenchidas de um tabuleiro
+function qtdElementos(matriz){
+  let count = 0;
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++){
+      if(matriz[i][j] !== 0)
+        count++;
+    }
+  }
+  return count;
+}
+
+function getFirstBlank(matriz){
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++) {
       if(matriz[i][j] === 0){
         return [i, j];
       }
@@ -198,6 +246,7 @@ function getFirstBlank(matriz){
 
 // verifica se pode colocar o numero k na posicao m[i][j]
 function movimentoValido(m, i, j, k){
+  if(k === 0) return true;
   // linha
   for(let a = 0; a < qtdX; a++)
     if(m[i][a] === k) return false;

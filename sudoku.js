@@ -74,6 +74,7 @@ let editavel = null;
 let fronteira = null;
 let explorados = null;
 
+let tempoInicial = 0;
 
 function buscaCegaInit(){
   busca = 'cega';
@@ -86,6 +87,7 @@ function buscaInformadaInit(){
 }
 
 function buscaInit(){
+  tempoInicial = new Date().getTime();
   buscando = true;
   button.remove();
   button2.remove();
@@ -105,7 +107,7 @@ function buscaInit(){
 }
 
 function buscaLoop(){
-  if(fronteira.length == 0){
+  if(fronteira.length == 0){ // busca falhou
     clearInterval(buscaTimer);
     return;
   }
@@ -114,15 +116,16 @@ function buscaLoop(){
   explorados.push(atual);
   if(qtdElementos(atual) === 81){ // meta
     clearInterval(buscaTimer);
+    console.log('Tempo total: ' + (new Date().getTime() - tempoInicial)/1000 + 's');
     return;
   }
-  if(busca=='cega'){
+  if(busca == 'cega'){
     let sucessores = getSucessoresCega(atual);
     for(let i = 0; i < sucessores.length; i++){
         fronteira.push(sucessores[i]);
     }
   }
-  else if(busca=='informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
+  else if(busca == 'informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
     let sucessores = getSucessoresInformada(atual);
     sucessores.sort(function(a,b){ return b.custo-a.custo});
     for(let i = 0; i < sucessores.length; i++){

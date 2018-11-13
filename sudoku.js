@@ -1,7 +1,7 @@
 let width, height, x, y, qtdX, qtdY, squareSize;
 let selectedCell = [0, 0];
 let buscando = false;
-let busca;
+let tipoBusca;
 let bntCega, btnInformada;
 
 let delay = 1; // velocidade da busca
@@ -77,12 +77,12 @@ let explorados = null;
 let tempoInicial = 0;
 
 function buscaCegaInit(){
-  busca = 'cega';
+  tipoBusca = 'cega';
   buscaInit();
 }
 
 function buscaInformadaInit(){
-  busca = 'informada';
+  tipoBusca = 'informada';
   buscaInit();
 }
 
@@ -119,13 +119,13 @@ function buscaLoop(){
     console.log('Tempo total: ' + (new Date().getTime() - tempoInicial)/1000 + 's');
     return;
   }
-  if(busca == 'cega'){
+  if(tipoBusca == 'cega'){
     let sucessores = getSucessoresCega(atual);
     for(let i = 0; i < sucessores.length; i++){
         fronteira.push(sucessores[i]);
     }
   }
-  else if(busca == 'informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
+  else if(tipoBusca == 'informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
     let sucessores = getSucessoresInformada(atual);
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);

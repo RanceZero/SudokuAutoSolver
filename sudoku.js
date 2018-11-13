@@ -297,8 +297,7 @@ function fillGrid(){
   }
 }
 
-function drawSelected(squareColor){
-  let [i, j] = selectedCell;
+function fillSquare(i, j, squareColor){
   push();
   fill(squareColor);
   rect(x+j*squareSize, y+i*squareSize, squareSize, squareSize);
@@ -310,7 +309,24 @@ function draw(){
   clear();
 
   if(!buscando){
-    drawSelected(color(0, 0, 255, 100));
+    // pinta a célula selecionada
+    let [i, j] = selectedCell;
+    fillSquare(i, j, color(0, 0, 255, 100));
+  }
+  else{
+    // pinta as células não editáveis
+    for(let i = 0; i < qtdX; i++){
+      for(let j = 0; j < qtdY; j++){
+        if(!editavel[i][j])
+          fillSquare(i, j, color(162, 172, 188, 130));
+      }
+    }
+  }
+
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++){
+      drawNumber(i, j, matrizDesenho[i][j]);
+    }
   }
 
   drawGrid();

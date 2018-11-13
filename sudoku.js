@@ -2,6 +2,7 @@ let width, height, x, y, qtdX, qtdY, squareSize;
 let selectedCell = [0, 0];
 let buscando = false;
 let busca;
+let bntCega, btnInformada;
 
 let delay = 1; // velocidade da busca
 
@@ -89,8 +90,8 @@ function buscaInformadaInit(){
 function buscaInit(){
   tempoInicial = new Date().getTime();
   buscando = true;
-  button.remove();
-  button2.remove();
+  btnCega.remove();
+  btnInformada.remove();
   editavel = [];
   for(let i = 0; i < qtdX; i++){
     editavel.push([]);
@@ -255,13 +256,13 @@ function setup(){
   x = width/2 - qtdX/2*squareSize;
   y = height/2 - qtdY/2*squareSize;
 
-  button = createButton('Busca em profundidade');
-  button.position(width/2-button.size().width/2+10, 05);
-  button.mousePressed(buscaCegaInit);
+  btnCega = createButton('Busca em profundidade');
+  btnCega.position(width/2-btnCega.size().width/2+10, 05);
+  btnCega.mousePressed(buscaCegaInit);
 
-  button2 = createButton('Busca best first');
-  button2.position(width/2-button2.size().width/2+10,40);
-  button2.mousePressed(buscaInformadaInit);
+  btnInformada = createButton('Busca best first');
+  btnInformada.position(width/2-btnInformada.size().width/2+10,40);
+  btnInformada.mousePressed(buscaInformadaInit);
 }
 
 function drawGrid(){

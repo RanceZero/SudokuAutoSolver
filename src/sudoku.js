@@ -314,7 +314,7 @@ function setup(){
   btnCega.position(width/2-btnCega.size().width/2+10, 05);
   btnCega.mousePressed(buscaCegaInit);
 
-  btnInformada = createButton('Busca best first');
+  btnInformada = createButton('Busca A*');
   btnInformada.position(width/2-btnInformada.size().width/2+10,40);
   btnInformada.mousePressed(buscaInformadaInit);
 }

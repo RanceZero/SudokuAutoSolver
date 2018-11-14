@@ -125,7 +125,7 @@ function buscaLoop(){
         fronteira.push(sucessores[i]);
     }
   }
-  else if(tipoBusca == 'informada'){ //fronteira.sort(function(a,b){ return b.custo-a.custo });
+  else if(tipoBusca == 'informada'){
     let sucessores = getSucessoresInformada(atual);
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
@@ -203,13 +203,16 @@ function impossivel(m){
 function numerosPossiveis(m, i, j){
   let lista = [], existe = {};
   for(let k = 1; k <= 9; k++) existe[k] = false;
+
   // linha
   for(let k = 1; k <= 9; k++){
     for(let a = 0; a < qtdX; a++)
       if(m[i][a] === k) existe[k] = true;
+
     // coluna
     for(let a = 0; a < qtdY; a++)
       if(m[a][j] === k) existe[k] = true;
+      
     // quadrado
     let I = Math.trunc(i/3)*3;
     let J = Math.trunc(j/3)*3;
@@ -247,12 +250,15 @@ function getFirstBlank(matriz){
 // verifica se pode colocar o numero k na posicao m[i][j]
 function movimentoValido(m, i, j, k){
   if(k === 0) return true;
+
   // linha
   for(let a = 0; a < qtdX; a++)
     if(m[i][a] === k) return false;
+
   // coluna
   for(let a = 0; a < qtdY; a++)
     if(m[a][j] === k) return false;
+
   // quadrado
   let I = Math.trunc(i/3)*3;
   let J = Math.trunc(j/3)*3;

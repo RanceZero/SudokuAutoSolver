@@ -130,7 +130,7 @@ function buscaLoop(){
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
     }
-    fronteira.sort(function(a,b){ return b.custo-a.custo});
+    fronteira.sort(function(a,b){ return b.f - a.f});
   }
 }
 
@@ -159,7 +159,7 @@ function getSucessoresInformada(matriz){
       let suc = copiaMatriz(matriz);
       suc[i][j] = k;
       if(!impossivel(suc) && !pertence(explorados, suc)){
-        suc.custo = f(suc);
+        suc.f = h(suc);
         sucessores.push(suc);
       }
     }
@@ -167,8 +167,8 @@ function getSucessoresInformada(matriz){
   return sucessores;
 }
 
-// função de avaliação
-function f(m){
+// função heurística
+function h(m){
   let r = 9;
   for(let i = 0; i < qtdX; i++){
     for(let j = 0; j < qtdY; j++){
@@ -211,7 +211,7 @@ function numerosPossiveis(m, i, j){
     // coluna
     for(let a = 0; a < qtdY; a++)
       if(m[a][j] === k) existe[k] = true;
-      
+
     // quadrado
     let I = Math.trunc(i/3)*3;
     let J = Math.trunc(j/3)*3;

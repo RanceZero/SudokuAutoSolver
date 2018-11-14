@@ -223,6 +223,18 @@ function numerosPossiveis(m, i, j){
   return lista;
 }
 
+// quantidade de celulas preenchidas de um tabuleiro
+function qtdElementos(matriz){
+  let count = 0;
+  for(let i = 0; i < qtdX; i++){
+    for(let j = 0; j < qtdY; j++){
+      if(matriz[i][j] !== 0)
+        count++;
+    }
+  }
+  return count;
+}
+
 function getFirstBlank(matriz){
   for(let i = 0; i < qtdX; i++){
     for(let j = 0; j < qtdY; j++) {
@@ -410,5 +422,3 @@ function keyTyped() {
     matrizDesenho[i][j] = parseInt(key);
   }
 }
-
-// :D

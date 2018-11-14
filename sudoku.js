@@ -7,15 +7,15 @@ let bntCega, btnInformada;
 let delay = 1; // velocidade da busca
 
 let matrizDesenho = [
-  [0, 2, 0, 6, 0, 8, 0, 0, 0],
-  [5, 8, 0, 0, 0, 9, 7, 0, 0],
-  [0, 0, 0, 0, 4, 0, 0, 0, 0],
-  [3, 7, 0, 0, 0, 0, 5, 0, 0],
-  [6, 0, 0, 0, 0, 0, 0, 0, 4],
-  [0, 0, 8, 0, 0, 0, 0, 1, 3],
-  [0, 0, 0, 0, 2, 0, 0, 0, 0],
-  [0, 0, 9, 8, 0, 0, 0, 3, 6],
-  [0, 0, 0, 3, 0, 6, 0, 9, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 /*
@@ -130,7 +130,7 @@ function buscaLoop(){
     for(let i = 0; i < sucessores.length; i++){
       fronteira.push(sucessores[i]);
     }
-    fronteira.sort(function(a,b){ return b.f - a.f});
+    fronteira.sort(function(a,b){ return b.custo - a.custo});
   }
 }
 
@@ -159,7 +159,7 @@ function getSucessoresInformada(matriz){
       let suc = copiaMatriz(matriz);
       suc[i][j] = k;
       if(!impossivel(suc) && !pertence(explorados, suc)){
-        suc.f = h(suc);
+        suc.custo = c(suc);
         sucessores.push(suc);
       }
     }
@@ -167,8 +167,8 @@ function getSucessoresInformada(matriz){
   return sucessores;
 }
 
-// função heurística
-function h(m){
+// função de custo
+function c(m){
   let r = 9;
   for(let i = 0; i < qtdX; i++){
     for(let j = 0; j < qtdY; j++){

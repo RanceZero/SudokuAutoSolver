@@ -25,5 +25,3 @@ A busca A* implementada se inicia inserindo o estado inicial na fronteira e, a c
 A função de custo utilizada para cada estado foi definida como sendo a quantidade de valores possíveis que podem ser colocados na célula da matriz que possui a menor quantidade de valores possíveis para serem inseridos nela, enquanto que a heurística definida faz com que estados "impossíveis" não sejam inseridos na fronteira. Um estado é definido como impossível se a sua matriz contém alguma célula vazia que não consiga receber nenhum valor em um movimento válido do sudoku.
 
 A busca A* implementada obteve resultados positivos, encontrando a meta (matriz com 81 elementos) mais rapidamente do que a busca cega em todos os casos testados.
-
-:D
